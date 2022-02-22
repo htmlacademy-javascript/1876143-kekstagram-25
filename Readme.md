@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Anna Lubarskaya](https://up.htmlacademy.ru/javascript/25/user/1876143).
-* Наставник: `Неизвестно`.
+* Наставник: [Александр Пинаев](https://htmlacademy.ru/profile/id1075973).
 
 ---
 
