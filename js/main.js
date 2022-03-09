@@ -34,42 +34,23 @@ function checkMaxLength (facktLengthString, maxLengthString = 140){
 checkMaxLength('');
 
 
-/*
 //дз №3
 
 
-В файле main.js на основе написанных по заданию ранее вспомогательных функций напишите необходимые функции для создания массива из 25 сгенерированных объектов. Каждый объект массива — описание фотографии, опубликованной пользователем.И тд.
+// генерирую список url адресов фотографий
+const URL =[];
+function getSetPhotoes (){
+  let set;
+  for (let i = 1; i <=25; i++){
+    set = `photos/${  i  }.jpg`;
+    //console.log(set);
+    URL[i-1] = set;
+  }
+  //console.log(URL);
+  return  URL;
+}
+getSetPhotoes ();
 
-*/
-
-
-const URL = [
-  'photos/1.jpg',
-  'photos/2.jpg',
-  'photos/3.jpg',
-  'photos/4.jpg',
-  'photos/5.jpg',
-  'photos/6.jpg',
-  'photos/7.jpg',
-  'photos/8.jpg',
-  'photos/9.jpg',
-  'photos/10.jpg',
-  'photos/11.jpg',
-  'photos/12.jpg',
-  'photos/13.jpg',
-  'photos/14.jpg',
-  'photos/15.jpg',
-  'photos/16.jpg',
-  'photos/17.jpg',
-  'photos/18.jpg',
-  'photos/19.jpg',
-  'photos/20.jpg',
-  'photos/21.jpg',
-  'photos/22.jpg',
-  'photos/23.jpg',
-  'photos/24.jpg',
-  'photos/25.jpg',
-];
 
 const DESCRIPTION = [
   'отличный вид',
@@ -99,7 +80,7 @@ const DESCRIPTION = [
   'опасность подстерегает на каждом шагу',
 ];
 
-const LIST_MESSEGE_OF_COMMENT = [
+const MESSEGES_OF_COMMENT = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра.',
@@ -119,7 +100,6 @@ const NAMES = [
   'Иван',
 ];
 
-
 //Функция, возвращающая случайное число из нужного диапазона
 function getRandomeNumber(from,to){
 
@@ -132,72 +112,49 @@ function getRandomeNumber(from,to){
   if (from < 0) {
     throw new RangeError('Параметр from должены быть больше 0');
   }
+  //console.log(Math.round(Math.random() * (to - from)) +   from);
   return Math.round(Math.random() * (to - from)) +   from;
 }
 
-const ID_ARRAY = [];/*создаю пустой массив в который функция getRandomeNumberWithoutRepeat будет помещать рандомно сгенерированные значения чтобы затем произвести проверку на повтор этих значений*/
+const idArray = [];/*создаю пустой массив в который функция getRandomeNumberWithoutRepeat будет помещать рандомно сгенерированные значения чтобы затем произвести проверку на повтор этих значений*/
 //Функция, возвращающая случайное число из нужного диапазона и проверяющая чтобы возвращаемые числа не повторялись
 function getRandomeNumberWithoutRepeat(from,to){
-  if (to < 0){
-    throw new RangeError('Параметр to должены быть больше 0');
-  }
-  if (from > to){
-    throw new RangeError('Параметр from должены быть меньшепараметра to');
-  }
-  if (from < 0) {
-    throw new RangeError('Параметр from должены быть больше 0');
-  }
-  const result = Math.round(Math.random() * (to - from)) +   from;
-  //console.log(result);
+  const result = getRandomeNumber(from,to);
   //проверка чтобы рандомное число не повторялось
-  for(let i = 0; i <= ID_ARRAY.length;i++ ){
-    if(ID_ARRAY.includes(result)){
+  for(let i = 0; i <= idArray.length;i++ ){
+    if(idArray.includes(result)){
       continue;
     }
-    ID_ARRAY.unshift(result);
+    idArray.unshift(result);
     //console.log(ID_ARRAY);
     break;
   }
-  return ID_ARRAY[0];
+  return idArray[0];
 }
+getRandomeNumberWithoutRepeat();
 
 //создаю функцию, которая будет создавать объект
 
 const getRandomArrayElement = (from,to) => getRandomeNumber(from,to);
-getRandomArrayElement();
 
 const getRandomArrayElementWithoutRepeat = (from,to) => getRandomeNumberWithoutRepeat(from,to);
-getRandomArrayElementWithoutRepeat();
+
+const getNumberPhoto = (from,to) => getRandomeNumberWithoutRepeat(from,to);
 
 const createDescriptionOfPhoto = () =>({
   id:getRandomArrayElementWithoutRepeat(1,25),
-  url:`photos/${  getRandomArrayElementWithoutRepeat(1,25)  }.jpg`,// eslint Предложил использовать литералы шаблонов вместо конкатенации строк.
-  description:DESCRIPTION[getRandomArrayElementWithoutRepeat(1,25) -1],  //каждое описание соответствует определенному фото
+  url:`photos/${getNumberPhoto(1,25)}.jpg`,
+  description:DESCRIPTION[getRandomArrayElementWithoutRepeat(1,25)-1],  //каждое описание соответствует определенному фото
   likes:getRandomArrayElement(15,200),
-  comments: { id: getRandomArrayElementWithoutRepeat(1,350),
-    avatar: `img/avatar-${  getRandomArrayElement(0,NAMES.length -1)  }.svg`,   //так как авторов 6, то и аватарок будет столько же сколько и авторов. Каждому автору соответствует одна аватарка.
-    messege:LIST_MESSEGE_OF_COMMENT[getRandomArrayElement(0,LIST_MESSEGE_OF_COMMENT.length -1)],
+  comments: {
+    id:getRandomArrayElementWithoutRepeat(1,350),
+    avatar: `img/avatar-${getRandomArrayElement(0,NAMES.length -1)}.svg`,   //так как авторов 6, то и аватарок будет столько же сколько и авторов. Каждому автору соответствует одна аватарка.
+    messege:MESSEGES_OF_COMMENT[getRandomArrayElement(0,MESSEGES_OF_COMMENT.length -1)],
     name:NAMES[getRandomArrayElement(0,NAMES.length -1)],
   }
 });
 createDescriptionOfPhoto();
-//здесь eslint ругался на форму записи, и с его помощью я решила проблему. Исходная запись ниже в комментарии
 
-/*
-const createDescriptionOfPhoto = () =>{
-  return {
-    id:getRandomArrayElementWithoutRepeat(1,25),
-    url:'photos/' + getRandomArrayElementWithoutRepeat(1,25) + '.jpg',
-    description:DESCRIPTION[getRandomArrayElementWithoutRepeat(1,25) -1],  //каждое описание соответствует определенному фото
-    likes:getRandomArrayElement(15,200),
-    comments: { id: getRandomArrayElementWithoutRepeat(1,350),
-      avatar: 'img/avatar-' + getRandomArrayElement(0,NAMES.length -1) + '.svg',   //так как авторов 6, то и аватарок будет столько же сколько и авторов. Каждому автору соответствует одна аватарка.
-      messege:LIST_MESSEGE_OF_COMMENT[getRandomArrayElement(0,LIST_MESSEGE_OF_COMMENT.length -1)],
-      name:NAMES[getRandomArrayElement(0,NAMES.length -1)],
-    }
-  }
-};
-createDescriptionOfPhoto();
-*/
 const SET_OF_PHOTOES = Array.from({length:25},createDescriptionOfPhoto);
 console.log(SET_OF_PHOTOES);
+
